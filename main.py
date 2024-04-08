@@ -10,18 +10,20 @@
 #introduction (welcome message, ask account number and PIN)
 def intro():
     print("Welcome to the Elite Bank, please input your account number and PIN to access your account.")
-    print("If you do not have an account, input 'new' to create one.\n")
-
-    return input("")
+    return input("If you do not have an account, input 'new' to create one.\n")
 
 
 #if new user: create, close, or modify an account
 
 def creating_acc():
-    print('hello')
+    user_name = input("Your first and last name: ")
+    user_birth_date = input("Your birth date (mm/dd/yyyy): ")
+    user_SSN = input("Your Social Security number (###-##-###): ")
+    user_phone_number = input("Your phone number (###-###-####): ")
+    # check user info is in right format
+    # send user info to table
 
-#present standard options (check balance, depositnew
-#  and withdraw
+#present standard options (check balance, deposit and withdraw)
 
 if intro() == "new":
     creating_acc()
