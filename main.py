@@ -19,11 +19,11 @@ connection = mysql.connector.connect(
 
 cursor = connection.cursor()
 testQuery = ("SELECT * FROM user_info")
-cursor.execute(testQuery)
 
 #printing every item in table
-for item in cursor:
-    print(item)
+# cursor.execute(testQuery)
+# for item in cursor:
+#     print(item)
 
 
 #introduction (welcome message, ask account number and PIN)
@@ -33,7 +33,7 @@ def intro():
     return input("If you do not have an account, input 'new' to create one.\n")
 
 
-#if new user: create, close, or modify an account
+#if new user: create, delete, or modify an account
 
 def creating_acc():
     user_name = input("Your first and last name: ")
@@ -41,18 +41,24 @@ def creating_acc():
     user_SSN = input("Your Social Security number (########): ")
     user_phone_number = input("Your phone number (##########): ")
 
-    #I DON"T KNOW WHAT TO DO WITH STUPID PIECE OF CODE THAT DOESN"T WANT TO WORK WITH MY LIFE LADKFJL:KDJF:LKDSJ:FLKJDF
+    if user_name.len() > 45:
+        print("Please enter a name less than 45 characters")
+    elif user_birth_date.len() > 10:
+        print("Please enter a appropriate date")
+    elif user_phone_number:
+        pass
+
+    #send user info to MySQL
     sql = "INSERT INTO user_info (name, date, SSN, number) VALUES (%s, %s, %s, %s)"
     val = (user_name, user_birth_date, user_SSN, user_phone_number)
     cursor.execute(sql, val)
     connection.commit()
     # TODO: check user info is in right format
-    # TODO: send user info to table
 
 #present standard options (check balance, deposit and withdraw)
 
-# if intro() == "new":
-#    creating_acc()
+if intro() == "new":
+   creating_acc()
 
 #close connection to MySQL
 cursor.close()
