@@ -30,20 +30,31 @@ def intro():
         print(f"{str(options.index(option) + 1)}. {option}")
     return input("")
 
+def uniqueRandint():
+    sql = "SELECT PIN FROM user_info"
+    cursor.execute(sql)
+    temp = random.randint(123456, 1000000)
+    #if temp in PIN row in user_info, then it creates another unqiue temp
+    for pin in cursor:
+        if pin == temp:
+           temp = random.randint(123456, 1000000)
+    return temp
+    
+
 def creating_acc():
     user_name = input("Your first and last name: ")
     user_birth_date = input("Your birth date (mm/dd/yyyy): ")
     user_SSN = input("Your Social Security number (########): ")
     user_phone_number = input("Your phone number (##########): ")
-    randomNum = random.randint(123456, 1000000)
+    randomNum = uniqueRandint()
 
     #check user info
     if len(user_name) > 45:
-        print("Please enter a name less than 45 characters")
+        print("Please enter a name less than 45 characters.")
     if len(user_birth_date) > 10:
-        print("Please enter a appropriate date")
+        print("Please enter a appropriate date.")
     if int(user_phone_number) > 9999999999:
-        print("Please print an appropriate phone number")
+        print("Please print an appropriate phone number.")
 
     #send user info to MySQL
     sql = "INSERT INTO user_info (name, date, SSN, number, PIN, balance) VALUES (%s, %s, %s, %s, %s, %s)"
@@ -56,28 +67,40 @@ def deleting_acc():
     user_PIN = input("PIN: ")
     
     #tries to delete account with user_PIN, else it quits
-    #try:
-    sql = "DELETE FROM user_info WHERE PIN = %s"
-    val = [user_PIN]
-    cursor.execute(sql, val)
-    connection.commit()
-    # except:
-    #     print("Please enter a valid PIN.")
+    try:
+        sql = "DELETE FROM user_info WHERE PIN = %s"
+        val = [user_PIN]
+        cursor.execute(sql, val)
+        connection.commit()
+        print("Your account is successfully been deleted.")
+    except:
+        print("Please enter a valid PIN.")
 
 def modify_acc():
+    print("we have to ask your PIN for security")
+    user_PIN = input("PIN: ")
+
+    #prints all attributes in user_info
     print("Please input one of the follwing attributes to modify your account: ")
     data = ['name', 'date', 'SSN (social security number)', 'number (phone number)']
     for attribute in data:
         print(attribute)
 
+    #asks which attribute; and it's new and current value
     user_choice = input("").lower()
-    user_confirm = input(f"What is your current {user_choice}:")
+    user_confirm = input(f"What is the current {user_choice}: ")
+    user_new = input(f"What would be the new {user_choice} be: ")
 
-    sql = f"SELECT {user_choice} from user_info WHERE {user_choice} = %s"
-    val = [user_confirm]
+    #updates attribute to new value
+    sql = f"UPDATE user_info SET {user_choice} = %s WHERE PIN = %s AND {user_choice} = %s"
+    val = [user_new, user_PIN, user_confirm]
     cursor.execute(sql, val)
-    print(cursor)
     connection.commit()
+    # TODO: compare account from before modification and after to see if the 
+    # modification is successful.
+
+def check_balance():
+    pass
 
 
 
@@ -89,6 +112,8 @@ elif user_input == '2':
     deleting_acc()
 elif user_input == '3':
     modify_acc()
+elif user_input == '4':
+    check_balance()
 
 
 #printing every item in table
