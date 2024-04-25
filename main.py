@@ -25,12 +25,9 @@ testQuery = ("SELECT * FROM user_info")
 #introduction (welcome message, present options, ask user where they want to go)
 def intro():
     print("Welcome to the Elite Bank, please input 1 - 6 to go where you want to go:")
-    print("1. create an account")
-    print("2. delete an account")
-    print("3. modify an accounte")
-    print("4. check balance")
-    print("5. withdraw")
-    print("6. deposit")
+    options = ['create an account', 'delete an account', 'modify an account', 'check balance', 'withdraw', 'deposit']
+    for option in options:
+        print(f"{str(options.index(option) + 1)}. {option}")
     return input("")
 
 def creating_acc():
@@ -55,46 +52,43 @@ def creating_acc():
     connection.commit()
 
 def deleting_acc():
-    print("we have to ask your PIN, account number, and name for security")
-
-    user_AC = input("Account number: ")
+    print("we have to ask your PIN for security")
     user_PIN = input("PIN: ")
-    user_name = input("Name: ")
-
-    table_AC = getRow()
-    table_PIN = getRow()
-    table_name = getRow()
     
-    #Makes sure user data matches table data for id, PIN, and name
-    if table_AC == table_name == table_PIN:
-        # TODO: figure out how to make the condition for the WHERE apply to anything
-        sql = "DELETE FROM user_info WHERE PIN = 0"
-        val = (user_PIN)
-        cursor.execute(sql)
-        connection.commit()
+    #tries to delete account with user_PIN, else it quits
+    #try:
+    sql = "DELETE FROM user_info WHERE PIN = %s"
+    val = [user_PIN]
+    cursor.execute(sql, val)
+    connection.commit()
+    # except:
+    #     print("Please enter a valid PIN.")
 
+def modify_acc():
+    print("Please input one of the follwing attributes to modify your account: ")
+    data = ['name', 'date', 'SSN (social security number)', 'number (phone number)']
+    for attribute in data:
+        print(attribute)
 
-        # TODO-ish: Debug line to make sure id for all accounts is correct
-        #ALTER TABLE user_info AUTO_INCREMENT = 1;
-    else:
-        print("Please input the right information corresponding to your account details.")
+    user_choice = input("").lower()
+    user_confirm = input(f"What is your current {user_choice}:")
 
-#gets a row from user_info table
-def getRow():
-    # TODO: figure out how to make the condition for the WHERE apply to anything
-    a = "1"
-    sql = f"SELECT * FROM user_info WHERE id = {a}"
-    val = (1)
-    cursor.execute(sql)
-    return cursor.fetchone()
+    sql = f"SELECT {user_choice} from user_info WHERE {user_choice} = %s"
+    val = [user_confirm]
+    cursor.execute(sql, val)
+    print(cursor)
+    connection.commit()
+
 
 
 # send user where they wanna go from intro()
-# user_input = intro()
-# if user_input == "1":
-#    creating_acc()
-# elif user_input == '2':
-#     deleting_acc()
+user_input = intro()
+if user_input == "1":
+   creating_acc()
+elif user_input == '2':
+    deleting_acc()
+elif user_input == '3':
+    modify_acc()
 
 
 #printing every item in table
