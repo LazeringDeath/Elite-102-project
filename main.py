@@ -192,9 +192,6 @@ def main():
     user_input = intro()
     os.system("cls")
     #create a function for user to confirm their actions or go back to menu screen
-    cursor.execute("SELECT * FROM user_info")
-    for item in cursor:
-        print(item)
 
     if user_input == "1":
         creating_acc()
