@@ -23,7 +23,7 @@ cursor = connection.cursor()
 #introduction (welcome message, present options, ask user where they want to go)
 def intro():
     os.system('cls')
-    print("Welcome to the Elite Bank, please input 1 - 6 to go where you want to go:")
+    print("Welcome to the Elite Bank, please input 1 - 6 to go to these options below or print '-1' to leave:")
     options = ['create an account', 'delete an account', 'modify an account', 'check balance', 'withdraw', 'deposit']
     for option in options:
         print(f"{str(options.index(option) + 1)}. {option}")
@@ -191,6 +191,9 @@ def main():
         check_balance()
     elif user_input == '5' or user_input == '6':
         change_balance(user_input)
+    elif user_input == '-1':
+        print("Thank you for using the Elite Bank, come back soon!")
+        quit()
     else:
         print("Please enter a suitable number.")
 
