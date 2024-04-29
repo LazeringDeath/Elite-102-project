@@ -74,6 +74,18 @@ def creating_acc():
         cursor.execute(sql, val)
         connection.commit()
 
+        #prints all of user's account details
+        counter = 0
+        attributes = ['\nAccount Number', 'Name', 'Date', 'Social Security Number', 'Phone Number', 'PIN', 'Current balance']
+        user_acc = getRow(randomNum)
+        for item in user_acc:
+            print(attributes[counter] + ": " + str(item))
+            counter += 1
+        
+        print("\nWARNING: All of your account details will ONLY when a new a account is created.")
+        input("Input anything to go back to the main menu: ")
+
+
 def deleting_acc():
     print("we have to ask your PIN for security")
     user_PIN = input("PIN: ")
@@ -86,8 +98,10 @@ def deleting_acc():
             cursor.execute(sql, val)
             connection.commit()
             print("Your account is successfully been deleted.")
+            time.sleep(2)
         except:
             print("Please enter a valid PIN.")
+            quit()
 
 def modify_acc():
     print("we have to ask your PIN for security")
@@ -117,8 +131,10 @@ def modify_acc():
                 print("Please enter the valid information from before.")
             else:
                 print(f"Your {user_choice} has been successfully changed.")
+            time.sleep(2)
         except:
             print("Please enter the valid information from before.")
+            quit()
 
 def check_balance():
     print("we have to ask your PIN for security")
@@ -137,8 +153,10 @@ def check_balance():
     #prints balance from user_acc if correct PIN
     if cursor != None:
         print("balance: " + str(user_acc[(len(user_acc)) - 1]))
+        time.sleep(2)
     else:
         print("Please enter a valid PIN.")
+        quit()
 
 def change_balance(user_input):
     print("we have to ask your PIN for security")
@@ -167,23 +185,32 @@ def change_balance(user_input):
         cursor.execute(sql, val)
         connection.commit()
         print("balance: " + str(new_balance))
+        time.sleep(2)
 
 def main():
     # send user where they wanna go from intro()
     user_input = intro()
     os.system("cls")
     #create a function for user to confirm their actions or go back to menu screen
+    cursor.execute("SELECT * FROM user_info")
+    for item in cursor:
+        print(item)
 
     if user_input == "1":
         creating_acc()
+        main()
     elif user_input == '2':
         deleting_acc()
+        main()
     elif user_input == '3':
         modify_acc()
+        main()
     elif user_input == '4':
         check_balance()
+        main()
     elif user_input == '5' or user_input == '6':
         change_balance(user_input)
+        main()
     elif user_input == '-1':
         print("Thank you for using the Elite Bank, come back soon!")
         quit()
