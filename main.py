@@ -34,6 +34,7 @@ def uniqueRandint():
     sql = "SELECT PIN FROM user_info"
     cursor.execute(sql)
     temp = random.randint(123456, 1000000)
+
     #if temp in PIN row in user_info, then it creates another unqiue temp
     for pin in cursor:
         if pin == temp:
@@ -100,9 +101,41 @@ def modify_acc():
     # modification is successful.
 
 def check_balance():
-    pass
+    print("we have to ask your PIN for security")
+    user_PIN = input("PIN: ")
 
+    #gets account from user_PIN
+    sql = "SELECT * FROM user_info WHERE pin = %s"
+    val = [user_PIN]
+    cursor.execute(sql, val)
+    user_acc = cursor.fetchone()
 
+    #prints balance from user_acc
+    print(user_acc[(len(user_acc)) - 1])
+
+def change_balance(user_input):
+    print("we have to ask your PIN for security")
+    user_PIN = input("PIN: ")
+
+    #gets account from user_PIN
+    sql = "SELECT * FROM user_info WHERE pin = %s"
+    val = [user_PIN]
+    cursor.execute(sql, val)
+    user_acc = cursor.fetchone()
+
+    #chaange balance by subtracting if user_input = 5, adding otherwise
+    if user_input == '5':
+        user_choice = int(input("How much do you want to withdraw: "))
+        new_balance = user_acc[(len(user_acc)) - 1] - user_choice
+    else:
+        user_choice = int(input("How much do you want to deposit: "))
+        new_balance = user_acc[(len(user_acc)) - 1] + user_choice
+
+    #update balance with new balance
+    sql = "UPDATE user_info SET balance = %s WHERE pin = %s"
+    val = [new_balance, user_PIN]
+    cursor.execute(sql, val)
+    connection.commit()
 
 # send user where they wanna go from intro()
 user_input = intro()
@@ -114,16 +147,18 @@ elif user_input == '3':
     modify_acc()
 elif user_input == '4':
     check_balance()
-
+elif user_input == '5':
+    change_balance(user_input)
+elif user_input == '6':
+    change_balance(user_input)
+else:
+    print("Please enter a suitable number.")
 
 #printing every item in table
-cursor.execute(testQuery)
-for item in cursor:
-    print(item)
-
+# cursor.execute(testQuery)
+# for item in cursor:
+#     print(item)
 
 #close connection to MySQL
 cursor.close()
 connection.close()
-
-#(1, ';ldksfj', 'lskdjf', 91283, 9283, 0, 0)
