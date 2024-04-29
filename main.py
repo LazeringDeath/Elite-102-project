@@ -82,7 +82,7 @@ def creating_acc():
             print(attributes[counter] + ": " + str(item))
             counter += 1
         
-        print("\nWARNING: All of your account details will ONLY when a new a account is created.")
+        print("\nWARNING: All of your account details will ONLY show when a new account is created.")
         input("Input anything to go back to the main menu: ")
 
 
