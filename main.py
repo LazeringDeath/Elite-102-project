@@ -2,13 +2,6 @@ import mysql.connector # type: ignore
 import random
 import os
 import time
-# In this project you will create an online banking program. Users need to 
-# have an account number and PIN to identify themselves as owners of an 
-# account. Once users get into the system they will have standard options: 
-# check balance, deposit, and withdraw. Additionally, a new user or bank 
-# administrator can also create a new account, close account, and modify 
-# an account (such as edit name, PIN, or any other personal identification 
-# required to open an account).
 
 
 #connecting to MySQL table
@@ -18,7 +11,6 @@ connection = mysql.connector.connect(
     password = 'password9('
 )
 cursor = connection.cursor()
-
 
 #introduction (welcome message, present options, ask user where they want to go)
 def intro():
@@ -41,6 +33,7 @@ def uniqueRandint():
     return temp
 
 def getRow(user_PIN):
+    #gets a row (account) from user_info and returns it
     try:
         sql = "SELECT * FROM user_info WHERE pin = %s"
         val = [user_PIN]
@@ -50,6 +43,7 @@ def getRow(user_PIN):
         print("Please enter a valid PIN.")
 
 def confirm():
+    #confirms user_choice before going ahead, otherwise user goes back to menu
     user_choice = input("Are you sure you want to do this? (input 'yes' or 'no')\n").lower()
     if user_choice == 'yes':
         return True
@@ -125,7 +119,6 @@ def modify_acc():
                 print(f"Your {user_choice} has been successfully changed.")
         except:
             print("Please enter the valid information from before.")
-    # TODO-ish: compare account from before modification and after to see if the modification is successful.
 
 def check_balance():
     print("we have to ask your PIN for security")
@@ -198,11 +191,6 @@ def main():
         print("Please enter a suitable number.")
 
 main()
-
-#printing every item in table
-cursor.execute("SELECT * FROM user_info")
-for item in cursor:
-    print(item)
 
 #close connection to MySQL
 cursor.close()
